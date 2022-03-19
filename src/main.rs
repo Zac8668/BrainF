@@ -1,5 +1,4 @@
 use std::fs;
-
 const CELL_LENGHT: usize = 30000;
 
 fn main() {
@@ -10,16 +9,16 @@ fn main() {
     }
     let mut ci = 0; //cell index
     let mut cells = vec![0; CELL_LENGHT]; //cells
-    let mut bl: Vec<usize> = vec![]; //before loop
+    let mut ol: Vec<usize> = vec![]; //opening loops
     let mut i = 0; //code index
 
     while i <= code.len() - 1 {
-        step(&code[i], &mut cells, &mut ci, &mut bl, &mut i);
+        step(&code[i], &mut cells, &mut ci, &mut ol, &mut i);
         i += 1;
     }
 }
 
-fn step(c: &char, cells: &mut Vec<u8>, ci: &mut usize, bl: &mut Vec<usize>, i: &mut usize) {
+fn step(c: &char, cells: &mut Vec<u8>, ci: &mut usize, ol: &mut Vec<usize>, i: &mut usize) {
     match c {
         '>' => *ci += 1,
         '<' => *ci -= 1,
@@ -28,12 +27,12 @@ fn step(c: &char, cells: &mut Vec<u8>, ci: &mut usize, bl: &mut Vec<usize>, i: &
         '.' => {
             print!("{}", cells[*ci] as char)
         },
-        '[' => bl.push(*i),
+        '[' => ol.push(*i),
         ']' => {
             if cells[*ci] != 0 {
-                *i = bl[bl.len()-1];
+                *i = *ol.last().expect(&format!("Closed bracket without open bracket on char {}", i));
             } else {
-                bl.remove(bl.len() -1);
+                ol.pop();
             }
         },
         _ => {}
