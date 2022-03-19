@@ -10,7 +10,7 @@ fn main() {
     }
     let mut ci = 0; //cell index
     let mut cells = vec![0; CELL_LENGHT]; //cells
-    let mut bl: Option<usize> = None; //before loop
+    let mut bl: Vec<usize> = vec![]; //before loop
     let mut i = 0; //code index
 
     while i <= code.len() - 1 {
@@ -19,7 +19,7 @@ fn main() {
     }
 }
 
-fn step(c: &char, cells: &mut Vec<u8>, ci: &mut usize, bl: &mut Option<usize>, i: &mut usize) {
+fn step(c: &char, cells: &mut Vec<u8>, ci: &mut usize, bl: &mut Vec<usize>, i: &mut usize) {
     match c {
         '>' => *ci += 1,
         '<' => *ci -= 1,
@@ -28,12 +28,12 @@ fn step(c: &char, cells: &mut Vec<u8>, ci: &mut usize, bl: &mut Option<usize>, i
         '.' => {
             print!("{}", cells[*ci] as char)
         },
-        '[' => *bl = Some(*i),
+        '[' => bl.push(*i),
         ']' => {
             if cells[*ci] != 0 {
-                *i = bl.unwrap();
+                *i = bl[bl.len()-1];
             } else {
-                *bl = None
+                bl.remove(bl.len() -1);
             }
         },
         _ => {}
