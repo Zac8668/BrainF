@@ -20,10 +20,10 @@ fn main() {
 
 fn step(c: &char, cells: &mut Vec<u8>, ci: &mut usize, ol: &mut Vec<usize>, i: &mut usize) {
     match c {
-        '>' => *ci += 1,
-        '<' => *ci -= 1,
-        '+' => if cells[*ci] == 255 {cells[*ci] = 0  } else {cells[*ci] += 1},
-        '-' => if cells[*ci] == 0   {cells[*ci] = 255} else {cells[*ci] -= 1},
+        '>' => if *ci == CELL_LENGHT -1 {panic!("overflow")} else {*ci += 1},
+        '<' => if *ci == 0 {panic!("overflow negative cell at index {}", i)} else {*ci -= 1},
+        '+' => {cells[*ci] = cells[*ci].wrapping_add(1)},
+        '-' => {cells[*ci] = cells[*ci].wrapping_sub(1)},
         '.' => {
             print!("{}", cells[*ci] as char)
         },
